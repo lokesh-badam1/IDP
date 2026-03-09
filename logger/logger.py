@@ -1,0 +1,10 @@
+import logging
+
+logging.basicConfig(filename="logs/app.log",level=logging.INFO,
+                    format="%(asctime)s : %(levelname)s: %(name)s : %(message)s",force=True)
+
+def get_logger(name: str):
+    return logging.getLogger(name)
+
+
+
