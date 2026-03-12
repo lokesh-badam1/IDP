@@ -9,9 +9,9 @@ class Invoice(Base):
     id : Mapped[int] = mapped_column(Integer,primary_key=True,index=True)
     invoice_id: Mapped[str] = mapped_column(String)
     customer_name: Mapped[str] = mapped_column(String)
-    date: Mapped[datetime] = mapped_column(DateTime)
+    date: Mapped[datetime] = mapped_column(DateTime,nullable=True)
     company_name: Mapped[str] = mapped_column(String)
     address: Mapped[str] = mapped_column(String)
     gst_number: Mapped[str] = mapped_column(String)
-    total_amount: Mapped[int] = mapped_column(Float)
+    total_amount: Mapped[int] = mapped_column(Float,nullable=True)
 

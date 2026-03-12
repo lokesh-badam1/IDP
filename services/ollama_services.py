@@ -1,22 +1,11 @@
-import os
-from google import genai
-from google.genai import types,errors
-from dotenv import load_dotenv
+from ollama import chat
 from logger.logger import get_logger
 
-load_dotenv()
-logger = get_logger(__name__)
-
-API_KEY = os.getenv("GEMINI_API_KEY")
-
-llm = genai.Client()
-
-def llm_response(context:str):
-    try :
-        response = llm.models.generate_content(
-            model="gemini-3-flash-preview",
-            config=types.GenerateContentConfig(
-                system_instruction="""You are a structured data extraction system.
+def ollama_response(context:str):
+    response = chat(model="gemma3",messages=[
+        {
+            'role':'system',
+            'content': """You are a structured data extraction system.
 
                 Extract the following fields from the input text and return ONLY valid JSON.
 
@@ -47,6 +36,9 @@ def llm_response(context:str):
                 7. Do not include any explanations or extra text.
                 8. Output must be valid JSON only.
                 9. Don't add even json in start
+                10. Don't change the parameter company name
+                11. Make no typing errors
+                
 
                 Expected JSON format:
 
@@ -68,20 +60,9 @@ def llm_response(context:str):
                 ]
                 }
                 """
-            ),
-            contents=f"{context}",
-        )
-        return response.text
-    except errors.ServerError as e:
-        logger.exception(f"LLM failed : Server error :{e}")
-        raise
-    except errors.ClientError as e:
-        logger.exception(f"LLM failed : Client error :{e}")
-        raise
-    except errors.APIError as e:
-        logger.exception(f"LLM failed : API error :{e}")
-        raise
-    except Exception as e:
-        logger.exception(f"LLM failed : {e}")
-        raise
-        
+        },
+        {'role': 'user', 'content': f"{context}"}
+    ],format='json')
+    return response['message']['content']
+
+

@@ -1,5 +1,5 @@
 import pdfplumber
-from oops_parsers.parsers import AbstractParser
+from parsers.parsers import AbstractParser
 from logger.logger import get_logger
 
 class PdfPlumberParser(AbstractParser):
