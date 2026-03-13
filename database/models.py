@@ -32,4 +32,4 @@ class Logs(Base):
 
     __tablename__ = "logs"
     time: Mapped[datetime] = mapped_column(DateTime)
-    description:Mapped[str] = mapped_column(String,nullable=True | False)
+    description:Mapped[str] = mapped_column(String,nullable=True)
