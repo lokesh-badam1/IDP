@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 
-class Item(BaseModel):
+class ItemDetails(BaseModel):
     item_name: str
     quantity: int
     unit_price: float
@@ -18,4 +18,4 @@ class InvoiceDetailsResponse(BaseModel):
     address: str
     gst_number: str
     total_amount: float
-    items: list[Item] = Field(default_factory=list)
+    items: list[ItemDetails] = Field(default_factory=list)

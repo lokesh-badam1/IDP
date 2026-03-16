@@ -10,7 +10,7 @@ from logger.logger import get_logger
 from typing import Annotated
 from sqlalchemy.orm import Session
 from database.database_con import Base, engine, get_db
-from database.models import Invoice
+from database.models import Invoice,Item
 
 logger = get_logger(__name__)
 
@@ -47,13 +47,18 @@ def post_extract_details(
         # print(json_data)
         try:
             db_data = json_data.copy()
-            db_data.pop("items", None)
+            items = db_data.pop("items", [])
             # db_data["date"] = datetime.strptime(db_data["date"], "%Y-%m-%d").date()
             date_value = db_data.get("date")
 
             if date_value:
                 db_data["date"] = datetime.strptime(date_value, "%Y-%m-%d").date()
             new_invoice = Invoice(**db_data)
+
+            for item in items:
+                new_item = Item(**item)
+                new_invoice.items.append(new_item)
+
             db.add(new_invoice)
             db.commit()
             db.refresh(new_invoice)

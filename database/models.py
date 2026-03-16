@@ -6,7 +6,7 @@ from database.database_con import Base
 
 class Invoice(Base):
 
-    __tablename__ = "invoices"
+    __tablename__ = "invoices_db"
     id : Mapped[int] = mapped_column(Integer,primary_key=True,index=True)
     invoice_id: Mapped[str] = mapped_column(String)
     customer_name: Mapped[str] = mapped_column(String)
@@ -15,21 +15,22 @@ class Invoice(Base):
     address: Mapped[str] = mapped_column(String)
     gst_number: Mapped[str] = mapped_column(String)
     total_amount: Mapped[int] = mapped_column(Float,nullable=True)
-    items: Mapped[list["ItemDetails"]] = relationship(back_populates="invoice")
+    items: Mapped[list["Item"]] = relationship(back_populates="invoice")
 
-class ItemDetails(Base):
+class Item(Base):
 
-    __tablename__ = "items"
+    __tablename__ = "items_db"
+    id : Mapped[int] = mapped_column(Integer,primary_key=True,index=True)
     item_name:Mapped[str] = mapped_column(String,nullable=True)
     quantity: Mapped[int] = mapped_column(Integer,nullable=True)
     unit_price: Mapped[float] = mapped_column(Float,nullable=True)
     total_price: Mapped[float] = mapped_column(Float,nullable=True)
-    invoice_id: Mapped[int] = mapped_column(ForeignKey("invoice.id"))
+    invoice_id: Mapped[int] = mapped_column(ForeignKey("invoices_db.id"))
     invoice: Mapped["Invoice"] = relationship(back_populates="items")
 
 
-class Logs(Base):
+# class Logs(Base):
 
-    __tablename__ = "logs"
-    time: Mapped[datetime] = mapped_column(DateTime)
-    description:Mapped[str] = mapped_column(String,nullable=True)
+#     __tablename__ = "logs_db"
+#     time: Mapped[datetime] = mapped_column(DateTime)
+#     description:Mapped[str] = mapped_column(String,nullable=True)
