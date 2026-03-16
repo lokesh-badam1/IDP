@@ -29,8 +29,3 @@ class Item(Base):
     invoice: Mapped["Invoice"] = relationship(back_populates="items")
 
 
-# class Logs(Base):
-
-#     __tablename__ = "logs_db"
-#     time: Mapped[datetime] = mapped_column(DateTime)
-#     description:Mapped[str] = mapped_column(String,nullable=True)

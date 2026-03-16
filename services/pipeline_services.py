@@ -1,4 +1,3 @@
-# from services.llm_services import llm_responses
 from llms.gemini_llm import Gemini
 from parsers.ocr_parsers.paddleocr_parser import PaddleOCRParser
 from parsers.ocr_parsers.tesseractocr_parser import TesseractOCRParser
@@ -6,63 +5,11 @@ from parsers.pdf_parsers.pdfplummer_parser import PdfPlumberParser
 from parsers.pdf_parsers.pypdf_parser import PyPDFParser
 from parsers.parsers import AbstractParser
 from parsers.parser_router import ParserRouter
-# from services.ollama_services import ollama_response
 from services.classification_services import classify_document
 from logger.logger import get_logger
 
 
 logger = get_logger(__name__)
-
-
-# def ocr_pipeline(file_path: str):
-#     try:
-#         logger.info("Starting OCR")
-
-#         parser = PaddleOCRParser()
-#         ocr_output = parser.parse(file_path)
-
-#         logger.info("Completed OCR")
-
-#         logger.info("Checking if uploaded document is an invoice")
-        
-#         classification_result = classify_document(ocr_output)
-#         if classification_result != "INVOICE":
-#             raise ValueError("Uploaded document is not an invoice")
-        
-#         logger.info("")
-
-#         logger.info("Starting LLM Processing")
-
-#         # llm_output = llm_response(ocr_output)
-#         llm_output = ollama_response(ocr_output)
-
-#         logger.info("Completed LLM Processing")
-#         # print(llm_output)
-#         return llm_output
-    
-#     except Exception:
-#         logger.exception(f"OCR pipeline failed")
-#         raise
-
-
-# def pdf_pipeline(file_path: str):
-#     try:
-#         logger.info("Starting PDF Parsing")
-
-#         parser = PdfPlumberParser()
-#         pdf_output = parser.parse(file_path)
-#         # pdf_output =  parse_pdf(file_path)
-
-#         logger.info("Completed PDF Parsing")
-#         logger.info("Starting LLM Processing")
-
-#         llm_output = llm_response(pdf_output)
-
-#         logger.info("Completed LLM Processing")
-#         # print(llm_output)
-#         return llm_output
-#     except Exception:
-#         logger.exception(f"PDF pipeline failed")
 
 def pipeline(file_path:str,parsers):
 
@@ -82,20 +29,6 @@ def run_pipeline(file_path, digitization, content_type: str):
         return pipeline(file_path,[PaddleOCRParser()])
     elif content_type == "image/jpeg" or content_type == "image/png":
         return pipeline(file_path,[PaddleOCRParser(),TesseractOCRParser()])
-    
-
-# def run_ocr(file_path:str)->str:
-
-#     logger.info("Starting Paddle OCR")
-
-#     try:
-#         parser = PaddleOCRParser()
-#         ocr_output:str = parser.parse(file_path)
-#     except:
-#         logger.error("OCR Failed")
-
-#     logger.info("OCR Completed")
-#     return ocr_output
 
 
 def run_parser(file_path:str,parsers:list[AbstractParser]):
@@ -107,6 +40,7 @@ def run_parser(file_path:str,parsers:list[AbstractParser]):
     
     logger.info("Parser Completed")
     return pdf_output
+
 
 def verify_invoice(ocr_output:str):
     logger.info("Checking if uploaded document is an invoice")
